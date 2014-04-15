@@ -70,8 +70,9 @@
     $("#submission input").keydown(function( event ) {
       console.log('input');
       if (event.which == 13) {
+        fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         if(has_emotions($(this).val())){
-          var message = "Would you like to add video to " + $(this).val() + " ?";
+          var message = "You've used an emoji! Would you like to add a video?";
           if (confirm(message)) {
             //disable stop button until recording complete
             $('#stop').prop('disabled', true);
@@ -79,8 +80,6 @@
           }else{
             fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
           }
-        }else{
-          fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         }
         $(this).val("");
         scroll_to_bottom(0);
