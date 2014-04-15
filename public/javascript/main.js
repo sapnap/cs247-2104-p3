@@ -51,19 +51,18 @@
 
     //direct button actions
     $('#stop').click(stopFunc);
-    //document.getElementById('#stop').disabled = "disabled";
+
     $('#cancel').click(cancelFunc);
 
     function stopFunc(event) {
        console.log('record');
        fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color})
        console.log('container to collapse: '+ $('.right-container').length);
-       //$('#stop').prop('disabled', true);
+       $('#stop').prop('disabled', true);
        $('.right-container').css('visibility', 'hidden');
      };
 
      function cancelFunc(event) {
-       $('#stop').prop('disabled', true);
        $('.right-container').css('visibility', 'hidden');
      };
 
@@ -118,11 +117,11 @@
       } else {
         video.loop= false;
       }
-      //choose to mute/include audio
-      if(document.getElementById('optionsRadios4').checked) {
-        video.muted = true;
-      }
-      video.width = 120;
+      // //choose to mute/include audio
+      // if(document.getElementById('optionsRadios4').checked) {
+      //   video.muted = true;
+      // }
+      // video.width = 120;
 
       var source = document.createElement("source");
       source.src =  URL.createObjectURL(base64_to_blob(data.v));
@@ -192,9 +191,9 @@
       $('#record').click(recordFunc);
 
       function recordFunc(event) {
-        $('#stop').prop('disabled', true);
         mediaRecorder.stop();
         mediaRecorder.start(3000);
+        console.log('done recording');
       };
 
       mediaRecorder.ondataavailable = function (blob) {
