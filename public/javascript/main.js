@@ -46,11 +46,35 @@
     fb_instance_users.push({ name: username,c: my_color});
     $("#waiting").remove();
 
+    //hide video submission tab
+    $('.right-container').css('visibility', 'hidden');
+
+    //direct button actions
+    $('#stop').click(stopFunc);
+    $('#cancel').click(cancelFunc);
+
+    function stopFunc(event) {
+       console.log('record');
+       fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color})
+       console.log('container to collapse: '+ $('.right-container').length);
+       $('.right-container').css('visibility', 'hidden');
+     };
+
+     function cancelFunc(event) {
+       $('.right-container').css('visibility', 'hidden');
+     };
+
     // bind submission box
     $("#submission input").keydown(function( event ) {
+      console.log('input');
       if (event.which == 13) {
         if(has_emotions($(this).val())){
-          fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color});
+          var message = "Would you like to add video to " + $(this).val() + " ?";
+          if (confirm(message)) {
+            $('.right-container').css('visibility', 'visible');
+          }else{
+            fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
+          }
         }else{
           fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
         }
@@ -59,8 +83,19 @@
       }
     });
 
+    // // bind submission box
+    // $("#submission input").keydown(function( event ) {
+    //   console.log('input');
+    //   if (event.which == 13) {
+    //       fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
+    //     $(this).val("");
+    //     scroll_to_bottom(0);
+    //   }
+    // });
+
     // scroll to bottom in case there is already content
     scroll_to_bottom(1300);
+
   }
 
   // creates a message node and appends it to the conversation
@@ -71,7 +106,17 @@
       var video = document.createElement("video");
       video.autoplay = true;
       video.controls = false; // optional
-      video.loop = true;
+      //choose to loop
+      if(document.getElementById('optionsRadios1').checked) {
+        console.log('loop');
+        video.loop = true;
+      } else {
+        video.loop= false;
+      }
+      //choose to mute/include audio
+      if(document.getElementById('optionsRadios4').checked) {
+        video.muted = true;
+      }
       video.width = 120;
 
       var source = document.createElement("source");
@@ -99,7 +144,7 @@
     // we're only recording video, not audio
     var mediaConstraints = {
       video: true,
-      audio: false
+      audio: true
     };
 
     // callback for when we get video stream from user.
@@ -147,11 +192,26 @@
             cur_video_blob = b64_data;
           });
       };
+
+       //record button
+      // $('#record').click(recordFunc);
+      // console.log("items found: " + $('#record').length);
+
+      // //stop button
+      // $('#stop').click(stopFunc);
+
+      // function recordFunc(event) {
+      //   console.log('record');
+      // };
+
+      // function stopFunc(event) {
+      //   console.log('stop');
+      // }
       setInterval( function() {
         mediaRecorder.stop();
         mediaRecorder.start(3000);
       }, 3000 );
-      console.log("connect to media stream!");
+      console.log("connected!");
     }
 
     // callback if there is an error when we try and get the video stream
@@ -165,7 +225,7 @@
 
   // check to see if a message qualifies to be replaced with video.
   var has_emotions = function(msg){
-    var options = ["lol",":)",":("];
+    var options = ["lol",":)",":(",":-)",":-(",":P"];
     for(var i=0;i<options.length;i++){
       if(msg.indexOf(options[i])!= -1){
         return true;

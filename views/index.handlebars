@@ -1,9 +1,80 @@
-  <div>Welcome to {{title}}, enable camera to post video emoji!</div>
+<!--   <div>Welcome to {{title}}, enable camera to post video emoji!</div>
   <div id="waiting">Connecting to chat server...</div>
   <div id="second_counter"></div>
   <div id="conversation"></div>
   <div id="submission">
     <input type="text" placeholder="say something..">
   </div>
+  <div class="btn-group" id="playback">
+  	<h5>You've entered an emoji!</h5>
+    <h5>Capture your emotion here:</h5>
+  	<button class="btn" id="record">Record</button>
+  	<button class="btn">Pause</button>
+ 	<button class="btn" id="stop">Stop</button>
+  </div>
   <div id="webcam_stream"></div>
+  <div id="video_container"></div> -->
+
+
+  <h3>Welcome to {{title}}</h3>
+  <h4>Enable camera and send emojis to post EmotiVids!</h4>
+  <div id="waiting">Connecting to chat server...</div>
+  <div class="right-container">
+    <div id="second_counter"></div>
+    <div id="webcam_stream"></div>
+
+    <!--Recording your video-->
+    <div id="playback">
+      <h4>You've entered an emoji!</h4>
+      <h4>Capture your EmotiVid here:</h4>
+
+      <h5>Would you like your video to loop?</h5>
+      <!--Choosing loop or not-->
+      <div class="form-inline">
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios1" value="option1" checked>
+            Loop
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios" id="optionsRadios2" value="option2">
+            No loop
+          </label>
+        </div>
+      </div>
+
+      <!--Choosing audio or not-->
+      <div class="form-inline">
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios2" id="optionsRadios3" value="option3" checked>
+            Include audio
+          </label>
+        </div>
+        <div class="radio">
+          <label>
+            <input type="radio" name="optionsRadios2" id="optionsRadios4" value="option4">
+            No audio
+          </label>
+        </div>
+      </div>
+      <div class="btn-group">
+        <button class="btn btn-default" id="record">
+          <span class="glyphicon glyphicon-record"></span>
+        </button>
+        <button class="btn btn-default">
+          <span class="glyphicon glyphicon-pause"></span>
+        </button>
+        <button class="btn btn-default" id="stop">Stop and Send</button>
+      </div>
+      <button class="btn btn-default" id="cancel">Cancel video</button>
+    </div>  
+  </div>
+  <div id="conversation"></div>
+  <div id="submission">
+    <input type="text" placeholder="say something..">
+  </div>
   <div id="video_container"></div>
+
