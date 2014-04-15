@@ -51,16 +51,19 @@
 
     //direct button actions
     $('#stop').click(stopFunc);
+    //document.getElementById('#stop').disabled = "disabled";
     $('#cancel').click(cancelFunc);
 
     function stopFunc(event) {
        console.log('record');
        fb_instance_stream.push({m:username+": " +$(this).val(), v:cur_video_blob, c: my_color})
        console.log('container to collapse: '+ $('.right-container').length);
+       //$('#stop').prop('disabled', true);
        $('.right-container').css('visibility', 'hidden');
      };
 
      function cancelFunc(event) {
+       $('#stop').prop('disabled', true);
        $('.right-container').css('visibility', 'hidden');
      };
 
@@ -71,6 +74,8 @@
         if(has_emotions($(this).val())){
           var message = "Would you like to add video to " + $(this).val() + " ?";
           if (confirm(message)) {
+            //disable stop button until recording complete
+            $('#stop').prop('disabled', true);
             $('.right-container').css('visibility', 'visible');
           }else{
             fb_instance_stream.push({m:username+": " +$(this).val(), c: my_color});
@@ -150,6 +155,7 @@
     // callback for when we get video stream from user.
     var onMediaSuccess = function(stream) {
       // create video element, attach webcam stream to video element
+      console.log('on media success');
       var video_width= 160;
       var video_height= 120;
       var webcam_stream = document.getElementById('webcam_stream');
@@ -183,14 +189,23 @@
       mediaRecorder.video_width = video_width/2;
       mediaRecorder.video_height = video_height/2;
 
+      $('#record').click(recordFunc);
+
+      function recordFunc(event) {
+        $('#stop').prop('disabled', true);
+        mediaRecorder.stop();
+        mediaRecorder.start(3000);
+      };
+
       mediaRecorder.ondataavailable = function (blob) {
-          //console.log("new data available!");
+          console.log("new data available!");
           video_container.innerHTML = "";
 
           // convert data into base 64 blocks
           blob_to_base64(blob,function(b64_data){
             cur_video_blob = b64_data;
           });
+          $('#stop').prop('disabled', false);
       };
 
        //record button
@@ -207,10 +222,10 @@
       // function stopFunc(event) {
       //   console.log('stop');
       // }
-      setInterval( function() {
-        mediaRecorder.stop();
-        mediaRecorder.start(3000);
-      }, 3000 );
+      // setInterval( function() {
+      //   mediaRecorder.stop();
+      //   mediaRecorder.start(3000);
+      // }, 3000 );
       console.log("connected!");
     }
 
